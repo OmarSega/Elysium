@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections;
 
 namespace Elysium
 {
@@ -11,6 +13,13 @@ namespace Elysium
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Spaceship Heroe;
+        ArrayList prowlers;
+        Background background;
+        Random rnd = new Random();
+
+        // Enemies
+        // -------------------------------------------
 
         public Game1()
         {
@@ -27,7 +36,20 @@ namespace Elysium
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            AbstractCharacter.SetLimits(800, 480);
+            prowlers = new ArrayList();
 
+            Heroe = new Spaceship();
+            Heroe.setKeys(Keys.Up, Keys.Down, Keys.Left, Keys.Right);
+
+            background = new Background();
+
+            for (int i = 0; i < 7; i++)
+            {
+                Prowler enemy = new Prowler();
+                enemy.setPos(new Vector2(rnd.Next(380, 400), rnd.Next(100, 100)));
+                prowlers.Add(enemy);
+            }
             base.Initialize();
         }
 
@@ -41,6 +63,13 @@ namespace Elysium
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            Heroe.LoadContent(Content);
+            background.LoadContent(Content);
+
+            for (int i = 0; i < prowlers.Count; i++)
+            {
+                ((Prowler)prowlers[i]).LoadContent(Content);
+            }
         }
 
         /// <summary>
@@ -63,6 +92,10 @@ namespace Elysium
                 Exit();
 
             // TODO: Add your update logic here
+            for (int i = 0; i < prowlers.Count; i++)
+                ((Prowler)prowlers[i]).Update(gameTime);
+
+            Heroe.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -76,6 +109,12 @@ namespace Elysium
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            background.Draw(spriteBatch);
+
+            for (int i = 0; i < prowlers.Count; i++)
+                ((Prowler)prowlers[i]).Draw(spriteBatch);
+
+            Heroe.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }
