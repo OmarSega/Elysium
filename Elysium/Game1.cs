@@ -7,19 +7,20 @@ using System.Collections;
 namespace Elysium
 {
     /// <summary>
-    /// This is the main type for your game.
+    /// Title: Elysium
+    /// Description:
+    ///   Final project for Object Oriented Programming
     /// </summary>
+    // Scene management
+    enum SceneManagement
+    {
+        LEVEL_1, LEVEL_2, MENU
+    };
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Spaceship Heroe;
-        ArrayList prowlers;
-        Background background;
-        Random rnd = new Random();
-
-        // Enemies
-        // -------------------------------------------
+        Level1 level_1;
 
         public Game1()
         {
@@ -35,21 +36,16 @@ namespace Elysium
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            AbstractCharacter.SetLimits(800, 480);
-            prowlers = new ArrayList();
+            // GLOBAL CONFIGURATION
+            graphics.PreferredBackBufferWidth = 1028;
+            graphics.PreferredBackBufferHeight = 578;
+            graphics.ApplyChanges();
+            AbstractCharacter.SetLimits(1028, 578);
 
-            Heroe = new Spaceship();
-            Heroe.setKeys(Keys.Up, Keys.Down, Keys.Left, Keys.Right);
+            // Scene initialization
+            level_1 = new Level1();
+            level_1.Initialize();
 
-            background = new Background();
-
-            for (int i = 0; i < 7; i++)
-            {
-                Prowler enemy = new Prowler();
-                enemy.setPos(new Vector2(rnd.Next(380, 400), rnd.Next(100, 100)));
-                prowlers.Add(enemy);
-            }
             base.Initialize();
         }
 
@@ -62,14 +58,8 @@ namespace Elysium
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
-            Heroe.LoadContent(Content);
-            background.LoadContent(Content);
-
-            for (int i = 0; i < prowlers.Count; i++)
-            {
-                ((Prowler)prowlers[i]).LoadContent(Content);
-            }
+            // Load scene content
+            level_1.LoadContent(Content);
         }
 
         /// <summary>
@@ -92,10 +82,7 @@ namespace Elysium
                 Exit();
 
             // TODO: Add your update logic here
-            for (int i = 0; i < prowlers.Count; i++)
-                ((Prowler)prowlers[i]).Update(gameTime);
-
-            Heroe.Update(gameTime);
+            level_1.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -108,13 +95,8 @@ namespace Elysium
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
-            background.Draw(spriteBatch);
-
-            for (int i = 0; i < prowlers.Count; i++)
-                ((Prowler)prowlers[i]).Draw(spriteBatch);
-
-            Heroe.Draw(spriteBatch);
+            // TODO: Add your drawing code here;
+            level_1.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }

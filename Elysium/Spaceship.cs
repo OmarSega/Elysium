@@ -15,6 +15,7 @@ namespace Elysium
     {
         // Attributes
         int life;
+        ArrayList Shots;
 
         // Constructor
         public Spaceship()
@@ -35,6 +36,14 @@ namespace Elysium
             life = 3;
             incX = 4;
             incY = 4;
+            Shots = new ArrayList();
+        }
+        public override void Update(GameTime gameTime)
+        {
+            // Generate enable shots every
+            // Remove shots
+
+            base.Update(gameTime);
         }
     }
 }

@@ -2,12 +2,13 @@
 
 namespace Elysium
 {
-    class Background : BasicSprite
+    class Background : BasicAnimatedSprite
     {
         // Constructor
         public Background()
         {
-            Init("background.jpg");
+            //setPos(0, 0);
+            //color = Color.White;
         }
         // Methods
         public void setSize(GraphicsDeviceManager graphics)

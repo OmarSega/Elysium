@@ -5,12 +5,6 @@
 //   tion based on whether the position increment attribute is a positive in-
 //   teger or not.
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Elysium
 {
@@ -45,6 +39,7 @@ namespace Elysium
             else if ((pos.X + moveLeft.Pos.Width) > wnd.Width || pos.X < 0)
                 incX *= -1;
 
+            // Contain character inside window
             contnInsdeWnd();
         }
     }
