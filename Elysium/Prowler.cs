@@ -28,8 +28,8 @@ namespace Elysium
             pos.X = 0;
             pos.Y = 0;
             life = 5;
-            incX = 7;
-            incY = 7;
+            incX = 4;
+            incY = 4;
         }
     }
 }

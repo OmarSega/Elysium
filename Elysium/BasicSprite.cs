@@ -134,5 +134,12 @@ namespace Elysium
             }
             return collision;
         }
+        public void setSize(int width, int height)
+        {
+            // Set Sprite size, it is not recommendable to use this with ani-
+            // mated sprites.
+            pos.Width = width;
+            pos.Height = height;
+        }
     }
 }

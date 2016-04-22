@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections;
+using Microsoft.Xna.Framework.Audio;
+using System.Collections.Generic;
 
 namespace Elysium
 {
@@ -21,11 +21,14 @@ namespace Elysium
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Level1 level_1;
+        BasicSprite lifeIndicator;
+        List<SoundEffect> SoundEffects;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            SoundEffects = new List<SoundEffect>();
         }
 
         /// <summary>
@@ -57,6 +60,11 @@ namespace Elysium
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            SoundEffects.Add(Content.Load<SoundEffect>("theme.wav"));
+            var instance = SoundEffects[0].CreateInstance();
+            instance.IsLooped = true;
+            instance.Volume = 0.3f;
+            //instance.Play();
 
             // Load scene content
             level_1.LoadContent(Content);
@@ -82,7 +90,7 @@ namespace Elysium
                 Exit();
 
             // TODO: Add your update logic here
-            level_1.Update(gameTime);
+            level_1.Update(gameTime, Content);
 
             base.Update(gameTime);
         }

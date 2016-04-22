@@ -13,6 +13,8 @@ namespace Elysium
         ArrayList Heroes;
         ArrayList Prowlers;
         ArrayList Tokens;
+        SpriteFont font;
+        BasicSprite Lifeindicator;
 
         // Random, to instatiate objects at random positions
         Random rnd = new Random();
@@ -27,9 +29,11 @@ namespace Elysium
             Prowlers = new ArrayList();
             Tokens = new ArrayList();
             background = new Background();
+            Lifeindicator = new BasicSprite();
 
             // Background initialization
-            background.Init("FondoNivel1", 6, 0, 0.16f, 1028, 578);
+            background.Init("FondoNivel2");
+            Lifeindicator.Init("Life_Indicator.png");
 
             // Initialization of heroes
             Spaceship Player_1 = new Spaceship();
@@ -54,12 +58,17 @@ namespace Elysium
                 ((Prowler)Prowlers[i]).LoadContent(Content);
 
             background.LoadContent(Content);
+            background.setPos(0, -20);
+            Lifeindicator.LoadContent(Content);
+            Lifeindicator.setPos(10, 20);
+            Lifeindicator.setSize(20, 20);
+            font = Content.Load<SpriteFont>("myFont");
         }
-        public SceneManagement Update(GameTime gameTime)
+        public SceneManagement Update(GameTime gameTime, ContentManager Content)
         {
             // Finally, update all elements
             for (int i = 0; i < Heroes.Count; i++)
-                ((Spaceship)Heroes[i]).Update(gameTime);
+                ((Spaceship)Heroes[i]).Update(gameTime, Content);
 
             for (int i = 0; i < Prowlers.Count; i++)
                 ((Prowler)Prowlers[i]).Update(gameTime);
@@ -82,6 +91,18 @@ namespace Elysium
 
             for (int i = 0; i < Heroes.Count; i++)
                 ((Spaceship)Heroes[i]).Draw(spriteBatch);
+
+            // Indicators
+            if (Heroes.Count == 1)
+            {
+                Lifeindicator.Draw(spriteBatch);
+                spriteBatch.Begin();
+                spriteBatch.DrawString(font, "Player 1 lives: " + ((Spaceship)Heroes[0]).Life, new Vector2(40, 20), Color.White);
+            }
+            if (Heroes.Count == 1)
+                spriteBatch.DrawString(font, "Player 1 lives: " + ((Spaceship)Heroes[0]).Life, new Vector2(850, 20), Color.White);
+
+            spriteBatch.End();
         }
     }
 }

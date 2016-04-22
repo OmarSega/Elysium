@@ -1,21 +1,42 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace Elysium
 {
-    class Background : BasicAnimatedSprite
+    class Background : BasicSprite
     {
-        // Constructor
-        public Background()
-        {
-            //setPos(0, 0);
-            //color = Color.White;
-        }
+        // Attributes
+        int limit;  // How far on the x plane we can set the origin of the 
+                    // source rectangle without getting of of the image.
+        int posX;   // Current position of the source rectangle.
+        float timer;// Manage background transitions.
+                    
         // Methods
+        public override void LoadContent(ContentManager Content)
+        {
+            base.LoadContent(Content);
+            limit = image.Width - wnd.Width - 641;
+        }
         public void setSize(GraphicsDeviceManager graphics)
         {
-            // Match background and viewport sizr
+            // Match background and viewport size
             pos.Width = graphics.GraphicsDevice.Viewport.Width;
             pos.Height = graphics.GraphicsDevice.Viewport.Height;
+            int limit = image.Width - wnd.Width;
+        }
+        public void Update(GameTime gameTime)
+        {
+            // Keep track track of elapsed game time
+            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Calculate new source position without scrolling thorugh the
+            // image at the speed of light.
+            if(timer > 0.3f)
+            {
+                posX += 1;
+                source.X = (posX + source.X) % limit;
+                timer = 0;
+            }
         }
     }
 }

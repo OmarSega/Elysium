@@ -88,7 +88,7 @@ namespace Elysium
         public void setPos(Vector2 newPos)
         {
             // Convert vector to rectangle and update this objects position.
-            Rectangle newPosition = moveLeft.Pos;
+            Rectangle newPosition = standLeft.Pos;
             newPosition.X = (int)newPos.X;
             newPosition.Y = (int)newPos.Y;
             pos = newPos;

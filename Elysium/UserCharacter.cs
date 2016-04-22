@@ -45,6 +45,7 @@ namespace Elysium
 
             // Choose new default state and contain inside window
             contnInsdeWnd();
+            setPos(pos);
             base.Update(gameTime);
         }
         public void setKeys(Keys up, Keys down, Keys left, Keys right)
