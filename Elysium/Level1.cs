@@ -66,6 +66,9 @@ namespace Elysium
         }
         public SceneManagement Update(GameTime gameTime, ContentManager Content)
         {
+            // Check collisions with all elements
+
+
             // Finally, update all elements
             for (int i = 0; i < Heroes.Count; i++)
                 ((Spaceship)Heroes[i]).Update(gameTime, Content);

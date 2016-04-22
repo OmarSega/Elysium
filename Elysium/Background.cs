@@ -8,7 +8,7 @@ namespace Elysium
         // Attributes
         int limit;  // How far on the x plane we can set the origin of the 
                     // source rectangle without getting of of the image.
-        int posX;   // Current position of the source rectangle.
+        float posX; // Current position of the source rectangle.
         float timer;// Manage background transitions.
                     
         // Methods
@@ -31,10 +31,10 @@ namespace Elysium
 
             // Calculate new source position without scrolling thorugh the
             // image at the speed of light.
-            if(timer > 0.3f)
+            if(timer > 0.15f)
             {
-                posX += 1;
-                source.X = (posX + source.X) % limit;
+                posX += 0.1f;
+                source.X = ((int)posX + source.X) % limit;
                 timer = 0;
             }
         }
