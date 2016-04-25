@@ -1,21 +1,38 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+using System.Collections.Generic;
 
 namespace Elysium
 {
     /// <summary>
-    /// This is the main type for your game.
+    /// Title: Elysium
+    /// Description:
+    ///   Final project for Object Oriented Programming
     /// </summary>
+    // Scene management
+    enum SceneManagement
+    {
+        LEVEL_1, LEVEL_2, MENU
+    };
+    enum Stage
+    {
+        STAGE_1, STAGE_2, STAGE_3, STAGE_4, BOSS
+    };
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Level1 level_1;
+        SceneManagement selector;
+        List<SoundEffect> SoundEffects;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            SoundEffects = new List<SoundEffect>();
         }
 
         /// <summary>
@@ -26,7 +43,16 @@ namespace Elysium
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // GLOBAL CONFIGURATION
+            graphics.PreferredBackBufferWidth = 1028;
+            graphics.PreferredBackBufferHeight = 578;
+            graphics.ApplyChanges();
+            AbstractCharacter.SetLimits(1028, 578);
+            selector = SceneManagement.LEVEL_1;
+
+            // Scene initialization
+            level_1 = new Level1();
+            level_1.Initialize();
 
             base.Initialize();
         }
@@ -39,8 +65,14 @@ namespace Elysium
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            SoundEffects.Add(Content.Load<SoundEffect>("theme.wav"));
+            var instance = SoundEffects[0].CreateInstance();
+            instance.IsLooped = true;
+            instance.Volume = 0.3f;
+            //instance.Play();
 
-            // TODO: use this.Content to load your game content here
+            // Load scene content
+            level_1.LoadContent(Content);
         }
 
         /// <summary>
@@ -63,6 +95,8 @@ namespace Elysium
                 Exit();
 
             // TODO: Add your update logic here
+            if (selector == SceneManagement.LEVEL_1)
+                selector = level_1.Update(gameTime, Content);
 
             base.Update(gameTime);
         }
@@ -75,7 +109,8 @@ namespace Elysium
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            // TODO: Add your drawing code here;
+            level_1.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }
