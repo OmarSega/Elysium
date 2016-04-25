@@ -48,7 +48,9 @@
     <Compile Include="BasicMonogame.cs" />
     <Compile Include="BasicSprite.cs" />
     <Compile Include="Cruiser.cs" />
+    <Compile Include="EnemyControl.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="HeroControl.cs" />
     <Compile Include="Level1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

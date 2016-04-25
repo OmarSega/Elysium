@@ -34,7 +34,7 @@ namespace Elysium
             if(timer > 0.15f)
             {
                 posX += 0.1f;
-                source.X = ((int)posX + source.X) % limit;
+                source.X = (12 + source.X) % limit;
                 timer = 0;
             }
         }

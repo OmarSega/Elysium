@@ -16,12 +16,16 @@ namespace Elysium
     {
         LEVEL_1, LEVEL_2, MENU
     };
+    enum Stage
+    {
+        STAGE_1, STAGE_2, STAGE_3, STAGE_4, BOSS
+    };
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Level1 level_1;
-        BasicSprite lifeIndicator;
+        SceneManagement selector;
         List<SoundEffect> SoundEffects;
 
         public Game1()
@@ -44,6 +48,7 @@ namespace Elysium
             graphics.PreferredBackBufferHeight = 578;
             graphics.ApplyChanges();
             AbstractCharacter.SetLimits(1028, 578);
+            selector = SceneManagement.LEVEL_1;
 
             // Scene initialization
             level_1 = new Level1();
@@ -64,7 +69,7 @@ namespace Elysium
             var instance = SoundEffects[0].CreateInstance();
             instance.IsLooped = true;
             instance.Volume = 0.3f;
-            instance.Play();
+            //instance.Play();
 
             // Load scene content
             level_1.LoadContent(Content);
@@ -90,7 +95,8 @@ namespace Elysium
                 Exit();
 
             // TODO: Add your update logic here
-            level_1.Update(gameTime, Content);
+            if (selector == SceneManagement.LEVEL_1)
+                selector = level_1.Update(gameTime, Content);
 
             base.Update(gameTime);
         }

@@ -16,7 +16,7 @@ namespace Elysium
     {
         // Attributes
         int life;                   // Ship's stamina
-        ArrayList Shots;            // Shots fired by the spaceship
+        public ArrayList Shots;     // Shots fired by the spaceship
         float timeSinceLastShot;    // Ancillary variable to control shot instantiation
         float timeBetweenShots;     // Time between shots
         Keys shotKey;               // Key used to shoot
@@ -51,6 +51,8 @@ namespace Elysium
             Shots = new ArrayList();
             SoundEffects = new List<SoundEffect>();
         }
+
+        // Methods
         public override void LoadContent(ContentManager Content)
         {
             // Load textures and sound effects
@@ -63,20 +65,8 @@ namespace Elysium
             timeSinceLastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Generate enable shots every
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) && timeSinceLastShot > timeBetweenShots)
-            {
-                AutoSprite shot = new AutoSprite("Shot_Heroe.png");
-                shot.LoadContent(Content);
-                shot.setSize(5, 9);
-                shot.setIncrement(9, 0);
-                shot.setPos((int)pos.X + standLeft.Pos.Width, (int)pos.Y + standLeft.Pos.Height / 2);
-                Shots.Add(shot);
-                timeSinceLastShot = 0f;
-
-                var instance = SoundEffects[0].CreateInstance();
-                instance.Volume = 0.4f;
-                instance.Play();
-            }
+            if (Keyboard.GetState().IsKeyDown(shotKey) && timeSinceLastShot > timeBetweenShots)
+                createShot(Content);
 
             // Update shots and remove if they are off the screen
             for (int i = 0; i < Shots.Count; i++)
@@ -86,18 +76,50 @@ namespace Elysium
                     Shots.RemoveAt(i);
             }
 
+            if (collStat)
+            {
+                life--;
+                collStat = false;
+            }
+
             base.Update(gameTime);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
+            // Draw ships
             base.Draw(spriteBatch);
+
+            // Draw shots
             for (int i = 0; i < Shots.Count; i++)
                 ((AutoSprite)Shots[i]).Draw(spriteBatch);
         }
+
+        // Configuration methods
         public void setShotKey(Keys key)
         {
             // Establish which key will be used to shoot
             shotKey = key;
+        }
+        void createShot(ContentManager Content)
+        {
+            // Configure and add new shot to Shots arraylist
+            AutoSprite shot = new AutoSprite("Shot_Heroe.png");
+            shot.LoadContent(Content);
+            shot.setSize(5, 9);
+            shot.setIncrement(9, 0);
+            shot.setPos((int)pos.X + standLeft.Pos.Width, (int)pos.Y + standLeft.Pos.Height / 2);
+            Shots.Add(shot);
+            timeSinceLastShot = 0f;
+
+            var instance = SoundEffects[0].CreateInstance();
+            instance.Volume = 0.4f;
+            instance.Play();
+        }
+
+        // Collision methods
+        public ArrayList getShots()
+        {
+            return Shots;
         }
     }
 }
