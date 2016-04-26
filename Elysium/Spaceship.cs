@@ -121,5 +121,9 @@ namespace Elysium
         {
             return Shots;
         }
+        public void removeShotAt(int i)
+        {
+            Shots.RemoveAt(i);
+        }
     }
 }

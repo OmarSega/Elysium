@@ -114,6 +114,9 @@
     <Content Include="Content\sShip1_Enemigo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\sShip2_Enemigo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\sShip_Heroe.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -30,7 +30,7 @@ namespace Elysium
             enemies = new ArrayList();
         }
         // Methods
-        public void LoadContent(ContentManager Content, string enemyType, int number)
+        public void loadEnemies(ContentManager Content, string enemyType, int number)
         {
             // Create new enemies according to the type and number specified.
             try
@@ -73,6 +73,20 @@ namespace Elysium
             else if (type == EnemyType.CRUISER)
                 for (int i = 0; i < enemies.Count; i++)
                     ((Cruiser)enemies[i]).Update(gameTime);
+            // Remove enemies if necessary
+            if (type == EnemyType.PROWLER)
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    if (((Prowler)enemies[i]).Life <= 0)
+                        enemies.RemoveAt(i);
+                }
+
+            else if (type == EnemyType.CRUISER)
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    if (((Cruiser)enemies[i]).Life <= 0)
+                        enemies.RemoveAt(i);
+                }
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -88,17 +102,51 @@ namespace Elysium
         
         // Collision handling and detection methods
         // TO DO: WE COULD USE A GENERIC COLLISION CHECK HERE!!!
-        public void Collision(Rectangle recIn)
+        public void Collision(ArrayList Heroes)
         {
             // Check collisions for each enemy
             if(type == EnemyType.PROWLER)
             {
-                for (int i = 0; i < enemies.Count; i++)
+                foreach(Prowler prowler in enemies)
                 {
-                    ((Prowler)enemies[i]).Collision(recIn);
-
-                    if (((Prowler)enemies[i]).collStat)
-                        enemies.RemoveAt(i);
+                    foreach (Spaceship spaceship in Heroes)
+                    {
+                        for (int k = 0; k < spaceship.getShots().Count; k++)
+                        {
+                            try
+                            {
+                                prowler.Collision(((AutoSprite)spaceship.getShots()[k]).Pos);
+                                if (prowler.collStat)
+                                    spaceship.removeShotAt(k);
+                            }
+                            catch
+                            {
+                                Console.WriteLine("Error al eliminar");
+                            }
+                        }
+                    }
+                }
+            }
+            if (type == EnemyType.CRUISER)
+            {
+                foreach (Cruiser prowler in enemies)
+                {
+                    foreach (Spaceship spaceship in Heroes)
+                    {
+                        for (int k = 0; k < spaceship.getShots().Count; k++)
+                        {
+                            try
+                            {
+                                prowler.Collision(((AutoSprite)spaceship.getShots()[k]).Pos);
+                                if (prowler.collStat)
+                                    spaceship.removeShotAt(k);
+                            }
+                            catch
+                            {
+                                Console.WriteLine("Error al eliminar");
+                            }
+                        }
+                    }
                 }
             }
         }

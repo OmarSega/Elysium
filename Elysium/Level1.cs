@@ -17,6 +17,9 @@ namespace Elysium
         // Scene
         Background background;
 
+        // Game control
+        Stage sequencer;
+
         public void Initialize()
         {
             // Initialization of all scene components
@@ -30,35 +33,30 @@ namespace Elysium
         public void LoadContent(ContentManager Content)
         {
             // Load content for all scene elements
-            Enemies.LoadContent(Content, "Prowler", 7);
+            Enemies.loadEnemies(Content, "Prowler", 1);
             Heroes.LoadContent(Content);
             background.LoadContent(Content);
             background.setPos(0, -20);
+            sequencer = Stage.STAGE_1;
         }
         public SceneManagement Update(GameTime gameTime, ContentManager Content)
         {
-            // Check collisions with all elements
-            //foreach(Prowler prowler in Enemies.getEnemies())
-            //{
-            //    foreach(Spaceship spaceship in Heroes.getHeroes())
-            //    {
-            //        foreach (AutoSprite shot in spaceship.getShots())
-            //        {
-            //            prowler.Collision(shot.Pos);
-            //        }
-            //    }
-            //}
-            for(int i = 0; i < Enemies.Count; i++)
+            // Delete check for enemies-shot collision
+            if(sequencer == Stage.STAGE_1)
             {
-                foreach (Spaceship spaceship in Heroes.getHeroes())
+                Enemies.Collision(Heroes.getHeroes());
+
+                // Proceed to the next stage
+                if(Enemies.Count <= 0)
                 {
-                    foreach (AutoSprite shot in spaceship.getShots())
-                    {
-                        ((Prowler)Enemies.getEnemies()[i]).Collision(shot.Pos);
-                        if (((Prowler)Enemies.getEnemies()[i]).collStat)
-                            Enemies.RemoveAt(i);
-                    }
+                    Enemies.loadEnemies(Content, "Cruiser", 3);
+                    sequencer = Stage.STAGE_2;
                 }
+            }
+
+            if (sequencer == Stage.STAGE_2)
+            {
+                Enemies.Collision(Heroes.getHeroes());
             }
 
             // Finally, update all elements
@@ -67,7 +65,7 @@ namespace Elysium
             background.Update(gameTime);
 
             // Check for level termination conditions
-            if (Enemies.Count <= 0)
+            if (Enemies.Count <= -1)
                 return SceneManagement.LEVEL_2;
             else
                 return SceneManagement.LEVEL_1;

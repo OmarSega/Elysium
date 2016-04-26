@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Elysium
 {
@@ -9,6 +10,11 @@ namespace Elysium
     {
         // Attributes
         int life;
+
+        public int Life
+        {
+            get { return life; }
+        }
 
         public Prowler()
         {
@@ -27,9 +33,19 @@ namespace Elysium
             // Configuration
             pos.X = 0;
             pos.Y = 0;
-            life = 5;
+            life = 2;
             incX = 4;
             incY = 4;
+        }
+        public override void Update(GameTime gameTime)
+        {
+            // If the prowler takes a hit, reduce life by one
+            if (collStat)
+            {
+                life--;
+                collStat = false;
+            }
+            base.Update(gameTime);
         }
     }
 }
