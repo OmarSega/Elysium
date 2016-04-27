@@ -44,7 +44,7 @@ namespace Elysium
             // Delete check for enemies-shot collision
             if(sequencer == Stage.STAGE_1)
             {
-                Enemies.Collision(Heroes.getHeroes());
+                Enemies.checkCollision<Prowler>(Heroes.getHeroes());
 
                 // Proceed to the next stage
                 if(Enemies.Count <= 0)

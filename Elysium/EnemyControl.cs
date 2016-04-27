@@ -159,5 +159,29 @@ namespace Elysium
         {
             enemies.RemoveAt(index);
         }
+
+        // ------- Experimento
+        public void checkCollision<T>(ArrayList Heroes) where T : AnimatedCharacter
+        {
+            foreach (T enemyShip in enemies)
+            {
+                foreach (Spaceship spaceship in Heroes)
+                {
+                    for (int k = 0; k < spaceship.getShots().Count; k++)
+                    {
+                        try
+                        {
+                            enemyShip.Collision(((AutoSprite)spaceship.getShots()[k]).Pos);
+                            if (enemyShip.collStat)
+                                spaceship.removeShotAt(k);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Error al eliminar");
+                        }
+                    }
+                }
+            }
+        }
     }
 }
