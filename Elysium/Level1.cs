@@ -49,19 +49,19 @@ namespace Elysium
                 // Proceed to the next stage
                 if(Enemies.Count <= 0)
                 {
-                    Enemies.loadEnemies(Content, "Cruiser", 3);
+                    Enemies.loadEnemies(Content, "Cruiser", 1);
                     sequencer = Stage.STAGE_2;
                 }
             }
 
-            if (sequencer == Stage.STAGE_2)
+            else if (sequencer == Stage.STAGE_2)
             {
                 Enemies.Collision(Heroes.getHeroes());
             }
 
             // Finally, update all elements
             Heroes.Update(gameTime, Content);
-            Enemies.Update(gameTime);
+            Enemies.Update(gameTime, Content);
             background.Update(gameTime);
 
             // Check for level termination conditions

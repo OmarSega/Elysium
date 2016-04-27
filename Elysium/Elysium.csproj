@@ -48,6 +48,7 @@
     <Compile Include="BasicMonogame.cs" />
     <Compile Include="BasicSprite.cs" />
     <Compile Include="Cruiser.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="EnemyControl.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="HeroControl.cs" />
@@ -88,6 +89,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Heart_5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\laser-shot-silenced.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\laser.wav">

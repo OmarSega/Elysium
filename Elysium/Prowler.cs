@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
+using System.Collections;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Elysium
 {
-    class Prowler : AutoCharacter
+    class Prowler : Enemy
     {
-        // Attributes
-        int life;
-
+        // Properties
         public int Life
         {
             get { return life; }
         }
 
+        // Constructor
         public Prowler()
         {
             // Initialize content for character in all its states.
@@ -30,22 +30,33 @@ namespace Elysium
             InitMove(SideDirection.RUN_UP, "sShip1_Enemigo.png", 1, 0, 1, 80, 77);
             InitMove(SideDirection.RUN_DOWN, "sShip1_Enemigo.png", 1, 0, 1, 80, 77);
 
+            // Shot content initialization
+            Shots = new ArrayList();
+            SoundEffects = new List<SoundEffect>();
+
             // Configuration
+            timeSinceLastShot = 0;
+            timeBetweenShots = 3;
             pos.X = 0;
             pos.Y = 0;
             life = 2;
             incX = 4;
             incY = 4;
         }
-        public override void Update(GameTime gameTime)
+
+        // Methods
+        public override void LoadContent(ContentManager Content)
         {
-            // If the prowler takes a hit, reduce life by one
-            if (collStat)
-            {
-                life--;
-                collStat = false;
-            }
-            base.Update(gameTime);
+            // Load textures and sound effects
+            SoundEffects.Add(Content.Load<SoundEffect>("laser-shot-silenced.wav"));
+            base.LoadContent(Content);
+        }
+        protected override void createShot(ContentManager Content)
+        {
+            base.createShot(Content);
+            var instance = SoundEffects[0].CreateInstance();
+            instance.Volume = 0.4f;
+            instance.Play();
         }
     }
 }

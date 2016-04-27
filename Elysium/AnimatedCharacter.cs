@@ -36,6 +36,8 @@ namespace Elysium
             moveRight = new BasicAnimatedSprite();
             moveUp = new BasicAnimatedSprite();
             moveDown = new BasicAnimatedSprite();
+
+            collStat = false;
         }
 
         // Methods

@@ -41,8 +41,8 @@ namespace Elysium
                     for (int i = 0; i < number; i++)
                     {
                         Cruiser enemy = new Cruiser();
-                        enemy.setPos(new Vector2(rnd.Next(950, 990), rnd.Next(0, 500)));
                         enemy.LoadContent(Content);
+                        enemy.setPos(new Vector2(rnd.Next(950, 990), rnd.Next(0, 500)));
                         enemies.Add(enemy);
                     }
                 }
@@ -63,16 +63,17 @@ namespace Elysium
                 Console.WriteLine("Error al crear enemigos.");
             }
         }
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, ContentManager Content)
         {
             // Draw all enemies
             if (type == EnemyType.PROWLER)
                 for (int i = 0; i < enemies.Count; i++)
-                    ((Prowler)enemies[i]).Update(gameTime);
+                    ((Prowler)enemies[i]).Update(gameTime, Content);
 
             else if (type == EnemyType.CRUISER)
                 for (int i = 0; i < enemies.Count; i++)
-                    ((Cruiser)enemies[i]).Update(gameTime);
+                    ((Cruiser)enemies[i]).Update(gameTime, Content);
+
             // Remove enemies if necessary
             if (type == EnemyType.PROWLER)
                 for (int i = 0; i < enemies.Count; i++)
@@ -129,7 +130,7 @@ namespace Elysium
             }
             if (type == EnemyType.CRUISER)
             {
-                foreach (Cruiser prowler in enemies)
+                foreach (Cruiser cruiser in enemies)
                 {
                     foreach (Spaceship spaceship in Heroes)
                     {
@@ -137,8 +138,8 @@ namespace Elysium
                         {
                             try
                             {
-                                prowler.Collision(((AutoSprite)spaceship.getShots()[k]).Pos);
-                                if (prowler.collStat)
+                                 cruiser.Collision(((AutoSprite)spaceship.getShots()[k]).Pos);
+                                if (cruiser.collStat)
                                     spaceship.removeShotAt(k);
                             }
                             catch

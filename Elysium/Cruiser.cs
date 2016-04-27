@@ -1,16 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Elysium
 {
-    class Cruiser : AutoCharacter
+    class Cruiser : Enemy
     {
-        // Attributes
-        int life;
-
         // Properties
         public int Life
         {
@@ -33,20 +33,32 @@ namespace Elysium
             InitMove(SideDirection.RUN_UP, "sShip2_Enemigo", 1, 0, 1, 88, 77);
             InitMove(SideDirection.RUN_DOWN, "sShip2_Enemigo", 1, 0, 1, 88, 77);
 
+            // Shot content initialization
+            Shots = new ArrayList();
+            SoundEffects = new List<SoundEffect>();
+
             // Configuration
-            life = 5;
+            timeSinceLastShot = 0;
+            timeBetweenShots = 3;
+            pos.X = 0;
+            pos.Y = 0;
+            life = 2;
             incX = 4;
             incY = 4;
         }
-        public override void Update(GameTime gameTime)
+        // Methods
+        public override void LoadContent(ContentManager Content)
         {
-            // If the prowler takes a hit, reduce life by one
-            if (collStat)
-            {
-                life--;
-                collStat = false;
-            }
-            base.Update(gameTime);
+            // Load textures and sound effects
+            SoundEffects.Add(Content.Load<SoundEffect>("laser-shot-silenced.wav"));
+            base.LoadContent(Content);
+        }
+        protected override void createShot(ContentManager Content)
+        {
+            base.createShot(Content);
+            var instance = SoundEffects[0].CreateInstance();
+            instance.Volume = 0.4f;
+            instance.Play();
         }
     }
 }
