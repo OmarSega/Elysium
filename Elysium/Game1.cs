@@ -68,8 +68,8 @@ namespace Elysium
             SoundEffects.Add(Content.Load<SoundEffect>("theme.wav"));
             var instance = SoundEffects[0].CreateInstance();
             instance.IsLooped = true;
-            instance.Volume = 0.3f;
-            //instance.Play();
+            instance.Volume = 1f;
+            instance.Play();
 
             // Load scene content
             level_1.LoadContent(Content);

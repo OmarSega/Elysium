@@ -1,5 +1,5 @@
 ﻿// Title: AnimatedCharacter
-// Descripcition:
+// Description:
 //   Provides the base functionality for an animated character, in conjunc-
 //   tion with the BasicSprite and BasicAnimatedSprite class forms a layered
 //   sprite capable of displaying both static and animated states.
@@ -36,6 +36,8 @@ namespace Elysium
             moveRight = new BasicAnimatedSprite();
             moveUp = new BasicAnimatedSprite();
             moveDown = new BasicAnimatedSprite();
+
+            collStat = false;
         }
 
         // Methods

@@ -94,44 +94,44 @@ namespace Elysium
             if (collision == false)
                 collision = pos.Intersects(recIn);
 
-            if (collision)
-            {
-                // Determine direction of collision by placing a rectangle
-                // on the Sprite's edges and checking if it is intersected
-                // by rectIn.
-                Rectangle collisionHandler = new Rectangle();
-                collisionHandler = pos;
+            //if (collision)
+            //{
+            //    // Determine direction of collision by placing a rectangle
+            //    // on the Sprite's edges and checking if it is intersected
+            //    // by rectIn.
+            //    Rectangle collisionHandler = new Rectangle();
+            //    collisionHandler = pos;
 
-                // Prepare collision handler to check for collsions from the
-                // left or right
-                collisionHandler.Width = 1;
-                collisionHandler.Height -= 2;
-                collisionHandler.Y += 1;
+            //    // Prepare collision handler to check for collsions from the
+            //    // left or right
+            //    collisionHandler.Width = 1;
+            //    collisionHandler.Height -= 2;
+            //    collisionHandler.Y += 1;
 
-                // Left side
-                if (collisionHandler.Intersects(recIn))
-                    collisionLeft = true;
+            //    // Left side
+            //    if (collisionHandler.Intersects(recIn))
+            //        collisionLeft = true;
 
-                // Right side
-                collisionHandler.X = pos.X + pos.Width - 1;
-                if (collisionHandler.Intersects(recIn))
-                    collisionRight = true;
+            //    // Right side
+            //    collisionHandler.X = pos.X + pos.Width - 1;
+            //    if (collisionHandler.Intersects(recIn))
+            //        collisionRight = true;
 
-                // Prepare collision handler to check for collsions from the
-                // top or bottom
-                collisionHandler = pos;
-                collisionHandler.Height = pos.Height - 2;
-                collisionHandler.Y += 1;
+            //    // Prepare collision handler to check for collsions from the
+            //    // top or bottom
+            //    collisionHandler = pos;
+            //    collisionHandler.Height = pos.Height - 2;
+            //    collisionHandler.Y += 1;
 
-                // Top side
-                if (collisionHandler.Intersects(recIn))
-                    collisionUp = true;
+            //    // Top side
+            //    if (collisionHandler.Intersects(recIn))
+            //        collisionUp = true;
 
-                // Bottom side
-                collisionHandler.Y = pos.Y + pos.Height - 1;
-                if (collisionHandler.Intersects(recIn))
-                    collisionDown = true;
-            }
+            //    // Bottom side
+            //    collisionHandler.Y = pos.Y + pos.Height - 1;
+            //    if (collisionHandler.Intersects(recIn))
+            //        collisionDown = true;
+            //}
             return collision;
         }
         public void setSize(int width, int height)

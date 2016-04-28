@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Title: Background
+// Description:
+//   Level backdrop, can scroll horizontally from right to left indefinitely.
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
 namespace Elysium

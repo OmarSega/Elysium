@@ -1,4 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Title: HeroControl
+// Description:
+//   Manages the interaction between a hero an the game, that is:
+//     * Creation of heroes
+//     * Control keys assignement
+//     * Displaying indicators
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,7 +17,6 @@ namespace Elysium
     {
         // Attributes
         ArrayList Heroes;            // Holds all the enemies.
-        bool firstPlayerActive;      // Indicates if the player is active
         List<BasicSprite> indicator; // Used as indicator
         SpriteFont font;             // Font used on the indicators 
 
@@ -33,7 +38,6 @@ namespace Elysium
             player1.setShotKey(Keys.Space);
             player1.setPos(new Vector2(50, 200));
             Heroes.Add(player1);
-            firstPlayerActive = true;
 
             // Add indicators
             BasicSprite lifeIndicator1 = new BasicSprite();
@@ -44,6 +48,7 @@ namespace Elysium
             indicator.Add(lifeIndicator1);
             indicator.Add(lifeIndicator2);
         }
+
         // Methods
         public void LoadContent(ContentManager Content)
         {
@@ -51,7 +56,7 @@ namespace Elysium
             ((Spaceship)Heroes[0]).LoadContent(Content);
             font = Content.Load<SpriteFont>("myFont");
 
-            // Load content for indicators
+            // Load content and configure indicators
             indicator[0].LoadContent(Content);
             indicator[1].LoadContent(Content);
             indicator[0].setPos(10, 20);
@@ -82,7 +87,8 @@ namespace Elysium
             for (int i = 0; i < Heroes.Count; i++)
                 ((Spaceship)Heroes[i]).Draw(spriteBatch);
 
-            // Draw indicators, it's complicated :(
+            // Draw indicators, the first one has to appear at the top left corner,
+            // the second oppposite the first one. It's complicated :(
             for (int i = 0; i < Heroes.Count; i++)
             {
                 indicator[i].Draw(spriteBatch);
@@ -95,20 +101,27 @@ namespace Elysium
         }
 
         // Player handling methods
-        public void ShipCollision(ArrayList shots)
+        public void checkCollision<T>(ArrayList enemies) where T : Enemy
         {
             foreach (Spaceship heroe in Heroes)
             {
-                foreach (AutoSprite shot in shots)
+                foreach (T enemy in enemies)
                 {
-                    heroe.Collision(shot.Pos);
+                    for (int k = 0; k < enemy.getShots().Count; k++)
+                    {
+                        heroe.Collision(((AutoSprite)enemy.getShots()[k]).Pos);
+
+                        // If there is a collision, remove shot
+                        if (heroe.collStat)
+                            enemy.removeShotAt(k);
+                    }
                 }
             }
         }
         void AddPlayer(ContentManager Content)
         {
-            // Add new player to game
-            if (firstPlayerActive)
+            // Adds a new player to the game, correctly assigning controls and indicators
+            if (((Spaceship)Heroes[0]).leftKey == Keys.Left)
             {
                 Spaceship player2 = new Spaceship();
                 player2.LoadContent(Content);
@@ -127,9 +140,9 @@ namespace Elysium
                 Heroes.Add(player1);
             }
         }
-
         public ArrayList getHeroes()
         {
+            // Return heroes currently held on the Heroes ArrayList
             return Heroes;
         }
     }

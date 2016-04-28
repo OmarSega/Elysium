@@ -1,7 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Title: Enemy
+// Description:
+//   Abstracts the interaction between an enemy and it's environement,
+//   it handles enemy generation, collision checking, removal of enemies
+//   and creation of explosions.
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections;
 
@@ -9,13 +13,13 @@ namespace Elysium
 {
     enum EnemyType
     {
-        PROWLER, CRUISER, BOSS
+        PROWLER, CRUISER, BOSS_1, BOSS_2
     };
     class EnemyControl
     {
         // Attributes
         ArrayList enemies;          // Holds all the enemies.
-        Random rnd = new Random();  // To instatiate objects at random positions
+        Random rnd = new Random(DateTime.Now.Second * DateTime.Now.Millisecond * DateTime.Now.Minute);  // To instatiate objects at random positions
         EnemyType type;             // Type of enemies held in arraylist.
 
         // Properties
@@ -29,8 +33,9 @@ namespace Elysium
         {
             enemies = new ArrayList();
         }
+
         // Methods
-        public void LoadContent(ContentManager Content, string enemyType, int number)
+        public void loadEnemies(ContentManager Content, string enemyType, int number)
         {
             // Create new enemies according to the type and number specified.
             try
@@ -40,9 +45,9 @@ namespace Elysium
                     type = EnemyType.CRUISER;
                     for (int i = 0; i < number; i++)
                     {
-                        Cruiser enemy = new Cruiser();
-                        enemy.setPos(new Vector2(rnd.Next(950, 990), rnd.Next(0, 500)));
+                        Cruiser enemy = new Cruiser(rnd.Next(0, 15));
                         enemy.LoadContent(Content);
+                        enemy.setPos(new Vector2(rnd.Next(900, 990), rnd.Next(0, 500)));
                         enemies.Add(enemy);
                     }
                 }
@@ -51,11 +56,19 @@ namespace Elysium
                     type = EnemyType.PROWLER;
                     for (int i = 0; i < number; i++)
                     {
-                        Prowler enemy = new Prowler();
+                        Prowler enemy = new Prowler(rnd.Next(0, 15));
                         enemy.setPos(new Vector2(rnd.Next(950, 990), rnd.Next(0, 500)));
                         enemy.LoadContent(Content);
                         enemies.Add(enemy);
                     }
+                }
+                else if (enemyType == "Boss_1")
+                {
+                    type = EnemyType.BOSS_1;
+                    Boss_Level_1 enemy = new Boss_Level_1();
+                    enemy.setPos(new Vector2(rnd.Next(500, 600), rnd.Next(0, 500)));
+                    enemy.LoadContent(Content);
+                    enemies.Add(enemy);
                 }
             }
             catch
@@ -63,16 +76,35 @@ namespace Elysium
                 Console.WriteLine("Error al crear enemigos.");
             }
         }
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, ContentManager Content)
         {
             // Draw all enemies
             if (type == EnemyType.PROWLER)
                 for (int i = 0; i < enemies.Count; i++)
-                    ((Prowler)enemies[i]).Update(gameTime);
+                    ((Prowler)enemies[i]).Update(gameTime, Content);
 
             else if (type == EnemyType.CRUISER)
                 for (int i = 0; i < enemies.Count; i++)
-                    ((Cruiser)enemies[i]).Update(gameTime);
+                    ((Cruiser)enemies[i]).Update(gameTime, Content);
+
+            else if (type == EnemyType.BOSS_1)
+                for (int i = 0; i < enemies.Count; i++)
+                    ((Boss_Level_1)enemies[i]).Update(gameTime, Content);
+
+            // Remove enemies if necessary
+            if (type == EnemyType.PROWLER)
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    if (((Prowler)enemies[i]).Life <= 0)
+                        enemies.RemoveAt(i);
+                }
+
+            else if (type == EnemyType.CRUISER)
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    if (((Cruiser)enemies[i]).Life <= 0)
+                        enemies.RemoveAt(i);
+                }
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -85,29 +117,41 @@ namespace Elysium
                 for (int i = 0; i < enemies.Count; i++)
                     ((Cruiser)enemies[i]).Draw(spriteBatch);
         }
-        
-        // Collision handling and detection methods
-        // TO DO: WE COULD USE A GENERIC COLLISION CHECK HERE!!!
-        public void Collision(Rectangle recIn)
-        {
-            // Check collisions for each enemy
-            if(type == EnemyType.PROWLER)
-            {
-                for (int i = 0; i < enemies.Count; i++)
-                {
-                    ((Prowler)enemies[i]).Collision(recIn);
 
-                    if (((Prowler)enemies[i]).collStat)
-                        enemies.RemoveAt(i);
+        // Collision handling and detection methods
+        public void checkCollision<T>(ArrayList Heroes) where T : AnimatedCharacter
+        {
+            // Check collision for each enemy currently held on the Enemies 
+            // arraylist, if there is Collision with a Shot then it's necessary to
+            // remove it so that it doesn't decrement the enemy's life continously.
+            foreach (T enemyShip in enemies)
+            {
+                foreach (Spaceship spaceship in Heroes)
+                {
+                    for (int k = 0; k < spaceship.getShots().Count; k++)
+                    {
+                        try
+                        {
+                            enemyShip.Collision(((AutoSprite)spaceship.getShots()[k]).Pos);
+                            if (enemyShip.collStat)
+                                spaceship.removeShotAt(k);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Error al eliminar");
+                        }
+                    }
                 }
             }
         }
         public ArrayList getEnemies()
         {
+            // Return arraylist of enemies.
             return enemies;
         }
         public void RemoveAt(int index)
         {
+            // Remove enemy at position i.
             enemies.RemoveAt(index);
         }
     }

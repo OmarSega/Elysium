@@ -12,7 +12,7 @@ namespace Elysium
     class UserCharacter : AnimatedCharacter
     {
         // Atributes
-        Keys Up, Down, Left, Right;
+        protected Keys Up, Down, Left, Right;
 
         // Methods
         public override void Update(GameTime gameTime)

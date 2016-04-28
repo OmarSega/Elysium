@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Title: Level 1
+// Description:
+//   This level consists of four stages on which the heroes will have to de-
+//   feat hordes of enemies from the Evil Empire, to get to the next level
+//   they will have to defeat a Boss.
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections;
 
 namespace Elysium
 {
@@ -12,10 +14,13 @@ namespace Elysium
         // Interactive elements
         EnemyControl Enemies;
         HeroControl Heroes;
-        SpriteFont font;
+        PowerUpControl powerUps;
 
         // Scene
         Background background;
+
+        // Game control
+        Stage sequencer;
 
         public void Initialize()
         {
@@ -23,6 +28,7 @@ namespace Elysium
             Enemies = new EnemyControl();
             Heroes = new HeroControl();
             background = new Background();
+            powerUps = new PowerUpControl();
 
             // Background initialization
             background.Init("FondoNivel2");
@@ -30,45 +36,83 @@ namespace Elysium
         public void LoadContent(ContentManager Content)
         {
             // Load content for all scene elements
-            Enemies.LoadContent(Content, "Prowler", 7);
+            Enemies.loadEnemies(Content, "Prowler", 7);
             Heroes.LoadContent(Content);
+            powerUps.LoadContent(Content);
             background.LoadContent(Content);
+
+            // Level configuration
             background.setPos(0, -20);
+            sequencer = Stage.STAGE_1;
         }
         public SceneManagement Update(GameTime gameTime, ContentManager Content)
         {
-            // Check collisions with all elements
-            //foreach(Prowler prowler in Enemies.getEnemies())
-            //{
-            //    foreach(Spaceship spaceship in Heroes.getHeroes())
-            //    {
-            //        foreach (AutoSprite shot in spaceship.getShots())
-            //        {
-            //            prowler.Collision(shot.Pos);
-            //        }
-            //    }
-            //}
-            for(int i = 0; i < Enemies.Count; i++)
+            if (sequencer == Stage.STAGE_1)
             {
-                foreach (Spaceship spaceship in Heroes.getHeroes())
+                Enemies.checkCollision<Prowler>(Heroes.getHeroes());
+                Heroes.checkCollision<Prowler>(Enemies.getEnemies());
+                powerUps.checkCollision(Heroes.getHeroes());
+
+                // Proceed to stage 2
+                if (Enemies.Count <= 0)
                 {
-                    foreach (AutoSprite shot in spaceship.getShots())
-                    {
-                        ((Prowler)Enemies.getEnemies()[i]).Collision(shot.Pos);
-                        if (((Prowler)Enemies.getEnemies()[i]).collStat)
-                            Enemies.RemoveAt(i);
-                    }
+                    Enemies.loadEnemies(Content, "Cruiser", 5);
+                    sequencer = Stage.STAGE_2;
                 }
+            }
+
+            else if (sequencer == Stage.STAGE_2)
+            {
+                Enemies.checkCollision<Cruiser>(Heroes.getHeroes());
+                Heroes.checkCollision<Cruiser>(Enemies.getEnemies());
+                powerUps.checkCollision(Heroes.getHeroes());
+
+                // Proceed to stage 3
+                if (Enemies.Count <= 0)
+                {
+                    Enemies.loadEnemies(Content, "Prowler", 5);
+                    sequencer = Stage.STAGE_3;
+                }
+            }
+            else if (sequencer == Stage.STAGE_3)
+            {
+                Enemies.checkCollision<Prowler>(Heroes.getHeroes());
+                Heroes.checkCollision<Prowler>(Enemies.getEnemies());
+                powerUps.checkCollision(Heroes.getHeroes());
+
+                // Proceed to stage 4
+                if (Enemies.Count <= 0)
+                {
+                    Enemies.loadEnemies(Content, "Prowler", 7);
+
+                    sequencer = Stage.STAGE_4;
+                }
+            }
+            else if (sequencer == Stage.STAGE_4)
+            {
+                Enemies.checkCollision<Prowler>(Heroes.getHeroes());
+                Heroes.checkCollision<Prowler>(Enemies.getEnemies());
+                powerUps.checkCollision(Heroes.getHeroes());
+
+                // Proceed to stage 3
+                //if (Enemies.Count <= 0)
+                //{
+                //    Enemies.loadEnemies(Content, "Prowler", 7);
+                //    sequencer = Stage.STAGE_4;
+                //}
             }
 
             // Finally, update all elements
             Heroes.Update(gameTime, Content);
-            Enemies.Update(gameTime);
+            Enemies.Update(gameTime, Content);
+            powerUps.Update(gameTime, Content);
             background.Update(gameTime);
 
             // Check for level termination conditions
-            if (Enemies.Count <= 0)
+            if (sequencer == Stage.BOSS && Enemies.Count == 0)
                 return SceneManagement.LEVEL_2;
+            else if (Heroes.Count == 0)
+                return SceneManagement.MENU;
             else
                 return SceneManagement.LEVEL_1;
         }
@@ -77,6 +121,7 @@ namespace Elysium
             // Draw all elements
             background.Draw(spriteBatch);
             Enemies.Draw(spriteBatch);
+            powerUps.Draw(spriteBatch);
             Heroes.Draw(spriteBatch);
         }
     }
