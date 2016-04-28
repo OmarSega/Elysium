@@ -43,12 +43,12 @@ namespace Elysium
 
             // Configuration
             timer = 0;
-            timeBetweenShots = 3;
+            timeBetweenShots = 5;
             pos.X = 0;
             pos.Y = 0;
             life = 5;
-            incX = 4;
-            incY = 4;
+            incX = 3;
+            incY = 3;
         }
         // Methods
         public override void LoadContent(ContentManager Content)

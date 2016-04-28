@@ -114,7 +114,7 @@ namespace Elysium
             // Configure and add new shot to Shots arraylist
             AutoSprite shot = new AutoSprite("Shot_Heroe.png");
             shot.LoadContent(Content);
-            shot.setSize(5, 9);
+            shot.setSize(9, 5);
             shot.setIncrement(9, 0);
             shot.setPos((int)pos.X + standLeft.Pos.Width, (int)pos.Y + standLeft.Pos.Height / 2);
             Shots.Add(shot);

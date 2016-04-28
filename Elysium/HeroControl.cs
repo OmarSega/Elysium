@@ -1,4 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Title: HeroControl
+// Description:
+//   Manages the interaction between a hero an the game, that is:
+//     * Creation of heroes
+//     * Control keys assignement
+//     * Displaying indicators
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -134,7 +140,6 @@ namespace Elysium
                 Heroes.Add(player1);
             }
         }
-
         public ArrayList getHeroes()
         {
             // Return heroes currently held on the Heroes ArrayList

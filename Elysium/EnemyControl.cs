@@ -13,13 +13,13 @@ namespace Elysium
 {
     enum EnemyType
     {
-        PROWLER, CRUISER, BOSS
+        PROWLER, CRUISER, BOSS_1, BOSS_2
     };
     class EnemyControl
     {
         // Attributes
         ArrayList enemies;          // Holds all the enemies.
-        Random rnd = new Random();  // To instatiate objects at random positions
+        Random rnd = new Random(DateTime.Now.Second * DateTime.Now.Millisecond * DateTime.Now.Minute);  // To instatiate objects at random positions
         EnemyType type;             // Type of enemies held in arraylist.
 
         // Properties
@@ -47,7 +47,7 @@ namespace Elysium
                     {
                         Cruiser enemy = new Cruiser(rnd.Next(0, 15));
                         enemy.LoadContent(Content);
-                        enemy.setPos(new Vector2(rnd.Next(950, 990), rnd.Next(0, 500)));
+                        enemy.setPos(new Vector2(rnd.Next(900, 990), rnd.Next(0, 500)));
                         enemies.Add(enemy);
                     }
                 }
@@ -61,6 +61,14 @@ namespace Elysium
                         enemy.LoadContent(Content);
                         enemies.Add(enemy);
                     }
+                }
+                else if (enemyType == "Boss_1")
+                {
+                    type = EnemyType.BOSS_1;
+                    Boss_Level_1 enemy = new Boss_Level_1();
+                    enemy.setPos(new Vector2(rnd.Next(500, 600), rnd.Next(0, 500)));
+                    enemy.LoadContent(Content);
+                    enemies.Add(enemy);
                 }
             }
             catch
@@ -78,6 +86,10 @@ namespace Elysium
             else if (type == EnemyType.CRUISER)
                 for (int i = 0; i < enemies.Count; i++)
                     ((Cruiser)enemies[i]).Update(gameTime, Content);
+
+            else if (type == EnemyType.BOSS_1)
+                for (int i = 0; i < enemies.Count; i++)
+                    ((Boss_Level_1)enemies[i]).Update(gameTime, Content);
 
             // Remove enemies if necessary
             if (type == EnemyType.PROWLER)

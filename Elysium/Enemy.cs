@@ -17,8 +17,8 @@ namespace Elysium
     class Enemy : AutoCharacter
     {
         // Attributes
-        protected int life;
-        protected float timer;  // Ancillary variable to control shot instantiation
+        protected int life;                 // Enemy's health
+        protected float timer;              // Ancillary variable to control shot instantiation
         protected float timeBetweenShots;   // Time between shots
         protected ArrayList Shots;          // Shots fired by the 
         protected float timeBforActvtion;   // Time before the enemy starts shooting

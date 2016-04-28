@@ -41,7 +41,7 @@ namespace Elysium
 
             // Configuration
             timer = 0;
-            timeBetweenShots = 2;
+            timeBetweenShots = 3;
             pos.X = 0;
             pos.Y = 0;
             life = 2;
@@ -60,7 +60,7 @@ namespace Elysium
         {
             base.createShot(Content);
             var instance = SoundEffects[0].CreateInstance();
-            instance.Volume = 0.4f;
+            instance.Volume = 0.1f;
             instance.Play();
         }
     }
