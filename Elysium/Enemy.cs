@@ -1,4 +1,11 @@
-﻿using System.Collections.Generic;
+﻿// Title: Enemy
+// Description:
+//   Provides the base functionality for an enemy, that is: shooting, playing
+//   audio when firing and decrementing life when fired.
+//   
+//   It is assumed all sprites have the same dimensions and position, most 
+//   attributes and functionality are determined by the leftmost BasicSprite.
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Audio;
@@ -11,9 +18,11 @@ namespace Elysium
     {
         // Attributes
         protected int life;
-        protected float timeSinceLastShot;    // Ancillary variable to control shot instantiation
-        protected float timeBetweenShots;     // Time between shots
-        protected ArrayList Shots;            // Shots fired by the enemy
+        protected float timer;  // Ancillary variable to control shot instantiation
+        protected float timeBetweenShots;   // Time between shots
+        protected ArrayList Shots;          // Shots fired by the 
+        protected float timeBforActvtion;   // Time before the enemy starts shooting
+        protected bool active;              // If an enemy can start shooting or not.
         protected List<SoundEffect> SoundEffects;
 
         public Enemy()
@@ -27,11 +36,17 @@ namespace Elysium
         public void Update(GameTime gameTime, ContentManager Content)
         {
             // Create new shots
-            timeSinceLastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (timeSinceLastShot > timeBetweenShots)
+            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (timer > timeBetweenShots && active)
             {
                 createShot(Content);
-                timeSinceLastShot = 0f;
+                timer = 0f;
+            }
+            // We'll also use the timer (timeSinceLastShot) to activate our enemy
+            // so that the enemies cannot fire all at the same time.
+            if (timer > timeBforActvtion)
+            {
+                active = true;
             }
 
             // If the prowler takes a hit, reduce life by one

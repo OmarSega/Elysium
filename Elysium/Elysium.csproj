@@ -50,6 +50,7 @@
     <Compile Include="Cruiser.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyControl.cs" />
+    <Compile Include="Explosion.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="HeroControl.cs" />
     <Compile Include="Level1.cs" />

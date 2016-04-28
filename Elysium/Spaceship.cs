@@ -1,7 +1,12 @@
 ﻿// Title: Spaceship
-// Author: Omar segura
 // Description:
+//   A spaceship is able to move freely horizontally and vertically, it is ar-
+//   med with a laser cannon that can be fired horizontally unrestrictedly 
+//   (the shots are stored on the Shots arraylist).
 // 
+//   It's health can be replenished whe it collides with a power up. The ob-
+//   jects of the spaceship class are meant to be controlled by the user and 
+//   will have three lives by default.
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,6 +32,10 @@ namespace Elysium
         {
             set { life = value; }
             get { return life; }
+        }
+        public Keys leftKey
+        {
+            get { return Left; }
         }
 
         // Constructor

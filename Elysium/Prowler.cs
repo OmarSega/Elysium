@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿// Title: Prowler
+// Description:
+//   An enemy spaceship that is able to move freely horizontally and vertically,
+//   it is armed with a laser cannon that can be fired horizontally everyseconds.
+// 
+//   This kind of enemy is more resilient than a Prowler but has a slow rate of fire.
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Audio;
 using System.Collections;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Elysium
 {
@@ -16,7 +20,7 @@ namespace Elysium
         }
 
         // Constructor
-        public Prowler()
+        public Prowler(int time)
         {
             // Initialize content for character in all its states.
             InitStand(SideDirection.STAND_LEFT, "sShip1_Enemigo.png");
@@ -33,10 +37,11 @@ namespace Elysium
             // Shot content initialization
             Shots = new ArrayList();
             SoundEffects = new List<SoundEffect>();
+            timeBforActvtion = time;
 
             // Configuration
-            timeSinceLastShot = 0;
-            timeBetweenShots = 3;
+            timer = 0;
+            timeBetweenShots = 2;
             pos.X = 0;
             pos.Y = 0;
             life = 2;

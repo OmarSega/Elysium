@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Title: Level 1
+// Description:
+//   This level consists of four stages on which the heroes will have to de-
+//   feat hordes of enemies from the Evil Empire, to get to the next level
+//   they will have to defeat a Boss.
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections;
 
 namespace Elysium
 {
@@ -12,7 +14,6 @@ namespace Elysium
         // Interactive elements
         EnemyControl Enemies;
         HeroControl Heroes;
-        SpriteFont font;
 
         // Scene
         Background background;
@@ -33,7 +34,7 @@ namespace Elysium
         public void LoadContent(ContentManager Content)
         {
             // Load content for all scene elements
-            Enemies.loadEnemies(Content, "Prowler", 1);
+            Enemies.loadEnemies(Content, "Prowler", 7);
             Heroes.LoadContent(Content);
             background.LoadContent(Content);
             background.setPos(0, -20);
@@ -41,13 +42,13 @@ namespace Elysium
         }
         public SceneManagement Update(GameTime gameTime, ContentManager Content)
         {
-            // Delete check for enemies-shot collision
-            if(sequencer == Stage.STAGE_1)
+            if (sequencer == Stage.STAGE_1)
             {
                 Enemies.checkCollision<Prowler>(Heroes.getHeroes());
+                Heroes.checkCollision<Prowler>(Enemies.getEnemies());
 
-                // Proceed to the next stage
-                if(Enemies.Count <= 0)
+                // Proceed to stage 2
+                if (Enemies.Count <= 0)
                 {
                     Enemies.loadEnemies(Content, "Cruiser", 1);
                     sequencer = Stage.STAGE_2;
@@ -56,7 +57,7 @@ namespace Elysium
 
             else if (sequencer == Stage.STAGE_2)
             {
-                Enemies.Collision(Heroes.getHeroes());
+                Enemies.checkCollision<Cruiser>(Heroes.getHeroes());
             }
 
             // Finally, update all elements
@@ -65,8 +66,10 @@ namespace Elysium
             background.Update(gameTime);
 
             // Check for level termination conditions
-            if (Enemies.Count <= -1)
+            if (sequencer == Stage.BOSS && Enemies.Count == 0)
                 return SceneManagement.LEVEL_2;
+            else if (Heroes.Count == 0)
+                return SceneManagement.MENU;
             else
                 return SceneManagement.LEVEL_1;
         }

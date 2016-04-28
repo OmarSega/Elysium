@@ -1,7 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Title: Enemy
+// Description:
+//   Abstracts the interaction between an enemy and it's environement,
+//   it handles enemy generation, collision checking, removal of enemies
+//   and creation of explosions.
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections;
 
@@ -29,6 +33,7 @@ namespace Elysium
         {
             enemies = new ArrayList();
         }
+
         // Methods
         public void loadEnemies(ContentManager Content, string enemyType, int number)
         {
@@ -40,7 +45,7 @@ namespace Elysium
                     type = EnemyType.CRUISER;
                     for (int i = 0; i < number; i++)
                     {
-                        Cruiser enemy = new Cruiser();
+                        Cruiser enemy = new Cruiser(rnd.Next(0, 15));
                         enemy.LoadContent(Content);
                         enemy.setPos(new Vector2(rnd.Next(950, 990), rnd.Next(0, 500)));
                         enemies.Add(enemy);
@@ -51,7 +56,7 @@ namespace Elysium
                     type = EnemyType.PROWLER;
                     for (int i = 0; i < number; i++)
                     {
-                        Prowler enemy = new Prowler();
+                        Prowler enemy = new Prowler(rnd.Next(0, 15));
                         enemy.setPos(new Vector2(rnd.Next(950, 990), rnd.Next(0, 500)));
                         enemy.LoadContent(Content);
                         enemies.Add(enemy);
@@ -100,69 +105,13 @@ namespace Elysium
                 for (int i = 0; i < enemies.Count; i++)
                     ((Cruiser)enemies[i]).Draw(spriteBatch);
         }
-        
-        // Collision handling and detection methods
-        // TO DO: WE COULD USE A GENERIC COLLISION CHECK HERE!!!
-        public void Collision(ArrayList Heroes)
-        {
-            // Check collisions for each enemy
-            if(type == EnemyType.PROWLER)
-            {
-                foreach(Prowler prowler in enemies)
-                {
-                    foreach (Spaceship spaceship in Heroes)
-                    {
-                        for (int k = 0; k < spaceship.getShots().Count; k++)
-                        {
-                            try
-                            {
-                                prowler.Collision(((AutoSprite)spaceship.getShots()[k]).Pos);
-                                if (prowler.collStat)
-                                    spaceship.removeShotAt(k);
-                            }
-                            catch
-                            {
-                                Console.WriteLine("Error al eliminar");
-                            }
-                        }
-                    }
-                }
-            }
-            if (type == EnemyType.CRUISER)
-            {
-                foreach (Cruiser cruiser in enemies)
-                {
-                    foreach (Spaceship spaceship in Heroes)
-                    {
-                        for (int k = 0; k < spaceship.getShots().Count; k++)
-                        {
-                            try
-                            {
-                                 cruiser.Collision(((AutoSprite)spaceship.getShots()[k]).Pos);
-                                if (cruiser.collStat)
-                                    spaceship.removeShotAt(k);
-                            }
-                            catch
-                            {
-                                Console.WriteLine("Error al eliminar");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        public ArrayList getEnemies()
-        {
-            return enemies;
-        }
-        public void RemoveAt(int index)
-        {
-            enemies.RemoveAt(index);
-        }
 
-        // ------- Experimento
+        // Collision handling and detection methods
         public void checkCollision<T>(ArrayList Heroes) where T : AnimatedCharacter
         {
+            // Check collision for each enemy currently held on the Enemies 
+            // arraylist, if there is Collision with a Shot then it's necessary to
+            // remove it so that it doesn't decrement the enemy's life continously.
             foreach (T enemyShip in enemies)
             {
                 foreach (Spaceship spaceship in Heroes)
@@ -182,6 +131,16 @@ namespace Elysium
                     }
                 }
             }
+        }
+        public ArrayList getEnemies()
+        {
+            // Return arraylist of enemies.
+            return enemies;
+        }
+        public void RemoveAt(int index)
+        {
+            // Remove enemy at position i.
+            enemies.RemoveAt(index);
         }
     }
 }
