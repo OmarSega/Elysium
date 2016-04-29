@@ -102,7 +102,7 @@ namespace Elysium
             singleFile = true;
             loadedSingle = true;
         }
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             // Keep track of the time, necessary for the animations.
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;

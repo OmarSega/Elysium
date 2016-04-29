@@ -31,12 +31,13 @@ namespace Elysium
             powerUps = new PowerUpControl();
 
             // Background initialization
-            background.Init("FondoNivel2");
+            background.Init("FondoNivel1");
         }
         public void LoadContent(ContentManager Content)
         {
             // Load content for all scene elements
-            Enemies.loadEnemies(Content, "Prowler", 7);
+            Enemies.LoadContent(Content);
+            Enemies.createEnemies(Content, "Prowler", 7);
             Heroes.LoadContent(Content);
             powerUps.LoadContent(Content);
             background.LoadContent(Content);
@@ -56,7 +57,7 @@ namespace Elysium
                 // Proceed to stage 2
                 if (Enemies.Count <= 0)
                 {
-                    Enemies.loadEnemies(Content, "Cruiser", 5);
+                    Enemies.createEnemies(Content, "Cruiser", 5);
                     sequencer = Stage.STAGE_2;
                 }
             }
@@ -70,7 +71,7 @@ namespace Elysium
                 // Proceed to stage 3
                 if (Enemies.Count <= 0)
                 {
-                    Enemies.loadEnemies(Content, "Prowler", 5);
+                    Enemies.createEnemies(Content, "Prowler", 5);
                     sequencer = Stage.STAGE_3;
                 }
             }
@@ -83,7 +84,7 @@ namespace Elysium
                 // Proceed to stage 4
                 if (Enemies.Count <= 0)
                 {
-                    Enemies.loadEnemies(Content, "Prowler", 7);
+                    Enemies.createEnemies(Content, "Prowler", 7);
 
                     sequencer = Stage.STAGE_4;
                 }

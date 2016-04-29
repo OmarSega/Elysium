@@ -24,7 +24,7 @@ namespace Elysium
         protected float timeBforActvtion;   // Time before the enemy starts shooting
         protected bool active;              // If an enemy can start shooting or not.
         protected List<SoundEffect> SoundEffects;
-
+        
         public Enemy()
         {
             // Shot content initialization
