@@ -14,7 +14,7 @@ namespace Elysium
     // Scene management
     enum SceneManagement
     {
-        LEVEL_1, LEVEL_2, MENU
+        LEVEL_1, LEVEL_2, MENU, EXIT
     };
     enum Stage
     {
@@ -24,6 +24,7 @@ namespace Elysium
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Menu menu;
         Level1 level_1;
         SceneManagement selector;
         List<SoundEffect> SoundEffects;
@@ -47,8 +48,12 @@ namespace Elysium
             graphics.PreferredBackBufferWidth = 1028;
             graphics.PreferredBackBufferHeight = 578;
             graphics.ApplyChanges();
+            IsMouseVisible = true;
             AbstractCharacter.SetLimits(1028, 578);
-            selector = SceneManagement.LEVEL_1;
+            selector = SceneManagement.MENU;
+
+            // Menu
+            menu = new Menu();
 
             // Scene initialization
             level_1 = new Level1();
@@ -65,13 +70,16 @@ namespace Elysium
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Initialize and loop theme song
             SoundEffects.Add(Content.Load<SoundEffect>("theme.wav"));
             var instance = SoundEffects[0].CreateInstance();
             instance.IsLooped = true;
-            instance.Volume = 1f;
+            instance.Volume = 0.2f;
             instance.Play();
 
             // Load scene content
+            menu.LoadContent(Content);
             level_1.LoadContent(Content);
         }
 
@@ -95,8 +103,14 @@ namespace Elysium
                 Exit();
 
             // TODO: Add your update logic here
-            if (selector == SceneManagement.LEVEL_1)
+            if (selector == SceneManagement.MENU)
+                selector = menu.Update();
+
+            else if (selector == SceneManagement.LEVEL_1)
                 selector = level_1.Update(gameTime, Content);
+
+            else if (selector == SceneManagement.EXIT)
+                Exit();
 
             base.Update(gameTime);
         }
@@ -107,10 +121,14 @@ namespace Elysium
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(new Color(14, 14, 31));
 
             // TODO: Add your drawing code here;
-            level_1.Draw(spriteBatch);
+            if (selector == SceneManagement.MENU)
+                menu.Draw(spriteBatch);
+
+            else if (selector == SceneManagement.LEVEL_1)
+                level_1.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }

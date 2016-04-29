@@ -21,6 +21,10 @@ namespace Elysium
             set { standLeft.collStat = value; }
             get { return standLeft.collStat; }
         }
+        public Rectangle Pos
+        {
+            get { return standLeft.Pos; }
+        }
 
         // Constructor
         public AnimatedCharacter()

@@ -34,7 +34,7 @@ namespace Elysium
             PowerUps = new ArrayList();
             rnd = new Random();
             SoundEffects = new List<SoundEffect>();
-            timeBtwnPowerUps = 30;
+            timeBtwnPowerUps = 50;
         }
 
         // Methods
